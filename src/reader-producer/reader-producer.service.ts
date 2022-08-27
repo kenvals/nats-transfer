@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Client, ClientProxy, Transport } from '@nestjs/microservices'
 import * as fs from 'fs'
+import { v4 as uuidv4 } from 'uuid'
 
 @Injectable()
 export class ReaderProducerService {
@@ -39,31 +40,35 @@ export class ReaderProducerService {
     const fileType = file.mimetype
     const chunkSize = Number(this.configService.get<number>('MAX_PIPE'))
     const totalChunks = Math.ceil(fileSize / chunkSize)
+    const uuid = uuidv4()
 
     let notice = {}
 
     while (currentChunk <= totalChunks) {
       const offset = (currentChunk - 1) * chunkSize
-      const sizeOffset=offset+chunkSize;
-      const currentFilePart = Buffer.from(file.buffer).slice(
+      const sizeOffset = offset + chunkSize
+      const currentFilePart = Buffer.from(file.buffer).slice(offset, sizeOffset)
+      const len = currentFilePart.length
+      notice = {
+        currentChunk,
+        totalChunks,
+        len,
+        fileType,
+        fileSize,
+        uuid,
         offset,
-        sizeOffset,
-      )
-      notice = { currentChunk, totalChunks, fileType, fileSize }
-
-      console.log('***')
-      console.log('offset:', offset)
-      console.log('Current chunk:', currentChunk)
-      console.log('Current chunk data', currentFilePart)
+      }
 
       this.producer(notice, currentFilePart)
-
 
       currentChunk++
     }
   }
 
   producer(_notice, _data) {
+    this.logger.debug(
+      `--> Чанк отправлен в Producer. Chunk: ${_notice.currentChunk}/${_notice.totalChunks} Размер чанка: ${_data.length} bytes. File: ${_notice.uuid}`,
+    )
     this.client.emit('binary-data', { _notice, _data })
   }
 }

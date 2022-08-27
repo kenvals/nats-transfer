@@ -10,7 +10,7 @@ export class WriterConsumerController {
   consumer(@Payload() payload: any) {
     const { _notice, _data } = payload
     this.logger.debug(
-      `<-- Файл пришел в Consumer. Размер: ${_notice.fileSize} bytes`,
+      `<-- Файл пришел в Consumer. Chunk: ${_notice.currentChunk}/${_notice.totalChunks} Размер чанка: ${_data.data.length} bytes. File: ${_notice.uuid}`,
     )
     this.writerConsumerService.write(_notice, _data)
 
