@@ -21,6 +21,7 @@ export class ReaderProducerService {
       'image/jpeg',
       'image/png',
       'image/webp',
+      'text/plain'
     ]
     // Проверяем поддержку типа файла
     if (!supportedFiles.includes(file.mimetype))
@@ -38,7 +39,7 @@ export class ReaderProducerService {
 
     const fileSize = file.size
     const fileType = file.mimetype
-    const chunkSize = Number(this.configService.get<number>('MAX_PIPE'))
+    const chunkSize = (this.configService.get<number>('MAX_CHUNK'))
     const totalChunks = Math.ceil(fileSize / chunkSize)
     const uuid = uuidv4()
 
