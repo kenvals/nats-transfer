@@ -8,17 +8,6 @@ services:
     ports:
       - '4222:4222'
       - '6222:6222'
+      
       - '8222:8222'
-  # rpwc:
-  #   container_name: rpwc
-  #   build: .
-  #   ports:
-  #     - 3000:3000
-  #   volumes:
-  #     - /Users/kenval/Desktop/temp/:/tmp/rpwc
-  #   environment:
-  #     - NATS_ADDR=nats://192.168.1.4:4222
-  #     - MAX_CHUNK=200000
-  #     - GARBAGE_PATH=/tmp/rpwc
-     
      
