@@ -12,10 +12,10 @@
 Слева представлена картинка до передачи и после передачи с помощью  NATS.
 
  - Картинка размером 1.5mb
-![alt text](images/p1.jpg)
+![1.5mb](https://github.com/kenvals/nats-transfer/blob/main/images/p1.png)
 
  - Картинка размером 4.8mb
-![alt text](images/p2.jpg)
+![4.8mb](https://github.com/kenvals/nats-transfer/blob/main/images/p2.png)
 
 ##### Как работает?
 
